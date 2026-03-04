@@ -1,96 +1,420 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>七12班官网</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
-        }
-        body {
-            background-color: #f5f7fa;
-            color: #333;
-        }
-        header {
-            background-color: #2c7be5;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-        .card {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
-        h2 {
-            color: #2c7be5;
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-        p {
-            line-height: 1.7;
-            margin-bottom: 10px;
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-            font-size: 14px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>七12班官网 · 留言板</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+    }
+
+    header {
+      background-color: #2c7be5;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      color: #2c7be5;
+      margin-bottom: 15px;
+      font-size: 20px;
+      border-left: 5px solid #2c7be5;
+      padding-left: 12px;
+    }
+
+    p {
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    /* 留言板专属样式 */
+    .message-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .message-form input,
+    .message-form textarea {
+      padding: 12px 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: 0.2s;
+      background-color: #fafafa;
+    }
+
+    .message-form input:focus,
+    .message-form textarea:focus {
+      outline: none;
+      border-color: #2c7be5;
+      background-color: #fff;
+      box-shadow: 0 0 0 3px rgba(44, 123, 229, 0.1);
+    }
+
+    .message-form textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .message-form button {
+      background-color: #2c7be5;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: background-color 0.2s, transform 0.1s;
+      box-shadow: 0 4px 6px rgba(44, 123, 229, 0.2);
+    }
+
+    .message-form button:hover {
+      background-color: #1a5db0;
+    }
+
+    .message-form button:active {
+      transform: scale(0.98);
+    }
+
+    .message-list {
+      margin-top: 30px;
+    }
+
+    .message-item {
+      background-color: #f9f9fc;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 15px;
+      border: 1px solid #e9eef2;
+      transition: box-shadow 0.2s;
+    }
+
+    .message-item:hover {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .message-name {
+      font-weight: 700;
+      color: #2c7be5;
+      background: #e9f0fe;
+      padding: 4px 12px;
+      border-radius: 30px;
+      display: inline-block;
+    }
+
+    .message-time {
+      color: #8a9bb5;
+      font-size: 13px;
+    }
+
+    .message-content {
+      font-size: 15px;
+      word-break: break-word;
+      margin-left: 5px;
+      padding-left: 10px;
+      border-left: 3px solid #dbe4ee;
+    }
+
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #b0c1d4;
+      cursor: pointer;
+      font-size: 18px;
+      margin-left: 10px;
+      transition: color 0.2s;
+    }
+
+    .delete-btn:hover {
+      color: #e05a5a;
+    }
+
+    .message-stats {
+      font-size: 14px;
+      color: #6f8fbb;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .clear-btn {
+      background: none;
+      border: 1px solid #d0ddee;
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-size: 13px;
+      color: #7d8fa9;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .clear-btn:hover {
+      background-color: #f0f4fd;
+      border-color: #a0b8d8;
+      color: #2c3e5c;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      font-size: 14px;
+      border-top: 1px solid #e0e8f0;
+      margin-top: 30px;
+    }
+  </style>
 </head>
 <body>
-
-<header>
+  <header>
     <h1>一中黄岗七12班官网</h1>
-    <p>©️2026～2027，by wenming</p>
-</header>
+    <p>©️2026～2027，by wenming</p >
+  </header>
 
-<div class="container">
+  <div class="container">
+    <!-- 网站介绍卡片 -->
     <div class="card">
-        <h2>网站介绍</h2>
-        <p>本网站现在处于开发模式有bug见谅</p>
+      <h2>📌 网站介绍</h2>
+      <p>本网站现在处于开发模式，有bug请见谅～ 最新版加入了留言板功能！大家快来灌水😝</p >
     </div>
 
+    <!-- 公告卡片 -->
     <div class="card">
-        <h2>公告</h2>
-        <p>2026.3.4传承杯抽签</p>
-        <p>2026.3.3传承杯开始报名</p>
+      <h2>📢 公告</h2>
+      <p>本校将于下周举行“传承杯”班际篮球、足球赛，以下是参赛名单：</p >
+      <p>🏀 男生篮球赛：梁溢钧 冯煜杰 赖潇衡 ……（还有同学忘了写😂）</p >
+      <p>⚽ 男生足球赛：谭国燊 邹文心 陈梓谦 黄奕翔 吴宇晨 谭新 彭嘉乐 程梓源 ……（又忘了😅）</p >
     </div>
 
+    <!-- 今日作业卡片 -->
     <div class="card">
-        <h2>今日作业</h2>
-        <p>1. </p>
-        <p>2. </p>
-        <p>3. </p>
-    </div>
-    <div class="card">
-        <h2>版本信息</h2>
-        <p>2026.3.3 1.0 </p>
-        
-         
+      <h2>📚 今日作业</h2>
+      <p>📘 语文：</p >
+      <p>📙 数学：</p >
+      <p>📗 英语：</p >
+      <p>📕 副科：</p >
     </div>
 
+    <!-- ===== 留言板卡片 ===== -->
+    <div class="card" id="message-board">
+      <h2>💬 班级留言板</h2>
+      <p style="margin-bottom: 5px;">有什么想说的？匿名或留名都可以～</p >
 
+      <!-- 留言输入表单 -->
+      <div class="message-form">
+        <input type="text" id="messageName" placeholder="你的名字（可以不写，默认“匿名”）" maxlength="20">
+        <textarea id="messageText" placeholder="写点什么吧......" maxlength="200"></textarea>
+        <button id="sendMessageBtn">📨 发布留言</button>
+      </div>
 
+      <!-- 留言列表区域 -->
+      <div class="message-list">
+        <div class="message-stats">
+          <span id="messageCount">0</span> 条留言
+          <button class="clear-btn" id="clearAllBtn">清空所有</button>
+        </div>
+        <div id="messageContainer">
+          <!-- 动态生成的留言会在这里出现 -->
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <footer>
+    © 2026 一中黄岗七12班官网 | 制作人员：你们的体委(快点赞助我我要买服务器)<br>
+    （快感谢死去的电教为你们打一堆字 ✨ 留言板已上线 ✨）
+  </footer>
 
-</div>
+  <script>
+    (function() {
+      // ---------- 数据操作 ----------
+      // 从 localStorage 加载留言，没有则返回空数组
+      function loadMessages() {
+        const stored = localStorage.getItem('classMessages');
+        return stored ? JSON.parse(stored) : [];
+      }
 
-<footer>
-    © 2026 一中黄岗七12班官网 | by 文明的职工 and (･_･)
-</footer>
+      // 保存留言数组到 localStorage
+      function saveMessages(messages) {
+        localStorage.setItem('classMessages', JSON.stringify(messages));
+      }
 
+      // 渲染留言列表到页面上
+      function renderMessages() {
+        const messages = loadMessages();
+        const container = document.getElementById('messageContainer');
+        const countSpan = document.getElementById('messageCount');
+
+        // 更新留言数量
+        countSpan.textContent = messages.length;
+
+        if (messages.length === 0) {
+          container.innerHTML = '<div style="text-align:center; color:#aaa; padding:30px 0;">🌱 还没有留言，快来说句话吧～</div>';
+          return;
+        }
+
+        // 按时间倒序排列（最新的在前）
+        messages.sort((a, b) => new Date(b.time) - new Date(a.time));
+
+        let htmlStr = '';
+        messages.forEach((msg, index) => {
+          // 注意：这里使用原始数组的索引作为删除标识不太可靠（排序后索引变了），所以使用 id 删除更合适
+          // 但我们存储时已经给每条留言一个独立 id (timestamp+随机数)
+          htmlStr += `
+            <div class="message-item" data-id="${msg.id}">
+              <div class="message-header">
+                <span class="message-name">${escapeHtml(msg.name) || '匿名'}</span>
+                <span style="display: flex; align-items: center;">
+                  <span class="message-time">${formatTime(msg.time)}</span>
+                  <button class="delete-btn" data-id="${msg.id}" title="删除留言">✕</button>
+                </span>
+              </div>
+              <div class="message-content">${escapeHtml(msg.content)}</div>
+            </div>
+          `;
+        });
+
+        container.innerHTML = htmlStr;
+
+        // 为所有删除按钮添加事件（事件委托也可以，但简单起见直接用动态绑定）
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const id = this.getAttribute('data-id');
+            deleteMessageById(id);
+          });
+        });
+      }
+
+      // 辅助：转义HTML特殊字符，防止XSS
+      function escapeHtml(unsafe) {
+        if (!unsafe) return unsafe;
+        return unsafe
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      // 格式化时间
+      function formatTime(timeStr) {
+        const date = new Date(timeStr);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hour = date.getHours().toString().padStart(2, '0');
+        const minute = date.getMinutes().toString().padStart(2, '0');
+        return `${year}-${month}-${day} ${hour}:${minute}`;
+      }
+
+      // 根据id删除单条留言
+      function deleteMessageById(id) {
+        let messages = loadMessages();
+        messages = messages.filter(msg => msg.id != id);  // 注意 id 可能是字符串，用 != 比较
+        saveMessages(messages);
+        renderMessages();  // 重新渲染
+      }
+
+      // 清空所有留言
+      function clearAllMessages() {
+        if (confirm('确定要删除所有留言吗？')) {
+          saveMessages([]);
+          renderMessages();
+        }
+      }
+
+      // 添加新留言
+      function addNewMessage(name, content) {
+        if (!content || content.trim() === '') {
+          alert('留言内容不能为空哦～');
+          return false;
+        }
+
+        const messages = loadMessages();
+        const newMsg = {
+          id: Date.now() + '-' + Math.random().toString(36).substr(2, 6),  // 简易唯一id
+          name: name.trim() ? name.trim() : '匿名',
+          content: content.trim(),
+          time: new Date().toISOString(),
+        };
+        messages.push(newMsg);
+        saveMessages(messages);
+        renderMessages();
+        return true;
+      }
+
+      // ---------- 事件绑定 ----------
+      document.addEventListener('DOMContentLoaded', () => {
+        // 初始渲染
+        renderMessages();
+
+        // 发布按钮点击
+        const sendBtn = document.getElementById('sendMessageBtn');
+        const nameInput = document.getElementById('messageName');
+        const textarea = document.getElementById('messageText');
+
+        sendBtn.addEventListener('click', () => {
+          const name = nameInput.value;
+          const content = textarea.value;
+          const success = addNewMessage(name, content);
+          if (success) {
+            // 清空输入框，保留名字可选（不清空名字）
+            textarea.value = '';
+            // 可选：让名字保留，方便连续留言，不重置nameInput
+            // 但也可以把名字清空？ 不清空更友好，避免反复打名字
+          }
+        });
+
+        // 清空所有按钮
+        const clearBtn = document.getElementById('clearAllBtn');
+        clearBtn.addEventListener('click', clearAllMessages);
+
+        // 按回车快捷发送（在文本框内按Ctrl+Enter 或 Enter 时发送）
+        textarea.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();  // 阻止换行
+            sendBtn.click();
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
